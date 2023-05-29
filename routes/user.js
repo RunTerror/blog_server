@@ -48,8 +48,12 @@ router.route("/register").post((req, res) => {
         password: req.body.password,
         email: req.body.email
     });
-    newUser.save();
-    res.json("saved");
+    newUser.save().then((result) => {
+        res.json(result);
+    }).catch((err) => {
+        res.json(err);
+    });;
+    
 
 });
 
