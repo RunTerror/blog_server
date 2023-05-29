@@ -6,15 +6,15 @@ const jwt = require("jsonwebtoken");
 const middleware = require("../middleware");
 
 
-router.route("/:username").get(middleware.checkToken,async(req, res) => {
+router.route("/:username").get(middleware.checkToken, async (req, res) => {
     const user = await User.findOne({ userName: req.params.username });
-    if(user!=null){
+    if (user != null) {
         res.json({
             user: user,
             msg: "user found"
         });
     }
-    else{
+    else {
         res.json({
             msg: "user not found"
         });
@@ -54,27 +54,25 @@ router.route("/register").post((req, res) => {
 });
 
 router.route("/update/:username").patch(async (req, res) => {
-   
-        var updated = await User.findOneAndUpdate(
-            { userName: req.params.username },
-            req.body,
-            {
-                new: true
-            }
-        );
-        if(updated!=null){
-            updated.password=req.body.password;
-            res.json({
-                msg: "updated"
-            });
-        }
-        else{
-            res.json({
-                msg: "user don't exist"
-            });
-        }
-   
 
+    var updated = await User.findOneAndUpdate(
+        { userName: req.params.username },
+        req.body,
+        {
+            new: true
+        }
+    );
+    if (updated != null) {
+        updated.password = req.body.password;
+        res.json({
+            msg: "updated"
+        });
+    }
+    else {
+        res.json({
+            msg: "user don't exist"
+        });
+    }
 });
 
 router.route("/delete/:username").delete(async function (req, res) {
