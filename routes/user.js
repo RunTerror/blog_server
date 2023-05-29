@@ -49,10 +49,16 @@ router.route("/register").post((req, res) => {
         email: req.body.email
     });
     newUser.save().then((result) => {
-        res.json(result);
+        res.json({
+            result: result
+        })
     }).catch((err) => {
-        res.json(err);
+        res.json({
+            err: err
+        });
+        
     });;
+
     
 
 });
