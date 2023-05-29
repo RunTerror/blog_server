@@ -21,6 +21,19 @@ router.route("/:username").get(middleware.checkToken, async (req, res) => {
     }
 });
 
+router.route("/checkuserName/:userName").get(async (req, res) => {
+    const user = await User.findOne({ userName: req.params.userName });
+    if (user == null) {
+        return res.json({
+            msg: false
+        });
+    } else {
+            return res.json({
+                msg: true
+            });
+    }
+});
+
 
 router.route("/login").post(async (req, res) => {
     const user = await User.findOne({ userName: req.body.userName });
@@ -50,17 +63,15 @@ router.route("/register").post((req, res) => {
     });
     newUser.save().then((result) => {
         res.json({
-            result: result
+            result: result,
+            msg: "new user added"
         })
     }).catch((err) => {
         res.json({
             err: err
         });
-        
+
     });;
-
-    
-
 });
 
 router.route("/update/:username").patch(async (req, res) => {
