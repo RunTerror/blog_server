@@ -1,7 +1,8 @@
 const middleware = require("../middleware");
-const router=express.Router();
 const Profile = require('../models/profile_model');
 const express=require('express');
+const router = express.Router();
+
 
 router.route("/add").post(middleware.checkToken, (req, res)=>{
     const newProfile=Profile({

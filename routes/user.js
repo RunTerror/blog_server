@@ -71,7 +71,6 @@ router.route("/register").post((req, res) => {
         res.json({
             err: err
         });
-
     });;
 });
 
