@@ -62,8 +62,9 @@ router.route("/register").post((req, res) => {
         email: req.body.email
     });
     newUser.save().then((result) => {
+        let token = jwt.sign({ userName: req.body.userName }, config.key, { expiresIn: "24h" });
         res.json({
-            result: result,
+            token: token,
             msg: "new user added"
         })
     }).catch((err) => {
