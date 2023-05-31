@@ -1,5 +1,5 @@
 const middleware = require("../middleware");
-const router = require("./user");
+const router=express.Router();
 
 router.route("/add").post(middleware.checkToken, (req, res)=>{
     const newProfile=Profile({
