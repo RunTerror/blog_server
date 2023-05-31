@@ -16,7 +16,8 @@ router.route("/add").post(middleware.checkToken, (req, res)=>{
     newProfile.save().then((result) => {
         return res.json("New Profile Created Succesfully");
     }).catch((err) => {
-        return res.statusCode(400).json({err: err});
+        return res.json({err: err,
+        msg: "username already exist"});
     });;
 })
 router.route("/anything").get((req, res)=>{
