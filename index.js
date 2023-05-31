@@ -20,6 +20,8 @@ connection.once("open", () => {
 const userRoute = require("./routes/user");
 app.use("/user", userRoute);
 app.route("/").get((req, res) => res.json("This is home page"));
+const profileRoute=require("./routes/profile");
+app.use("/profile", profileRoute);
 
 
 const port = process.env.port || 8000;
