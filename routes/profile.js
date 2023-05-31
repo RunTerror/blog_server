@@ -1,4 +1,5 @@
 const middleware = require("../middleware");
+const { route } = require("./user");
 const router=express.Router();
 
 router.route("/add").post(middleware.checkToken, (req, res)=>{
@@ -16,5 +17,8 @@ router.route("/add").post(middleware.checkToken, (req, res)=>{
         return res.statusCode(400).json({err: err});
     });;
 })
+router.route("/anything").get((req, res)=>{
+    res.json("done");
+});
 
 module.exports=router;
