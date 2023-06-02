@@ -17,6 +17,7 @@ connection.once("open", () => {
     console.log("mongodb connected");
 });
 
+app.use("/uploads", express.static("uploads"));
 const userRoute = require("./routes/user");
 app.use("/user", userRoute);
 app.route("/").get((req, res) => res.json("This is home page"));
@@ -25,4 +26,4 @@ app.use("/profile", profileRoute);
 
 
 const port = process.env.port || 8000;
-app.listen(port, () => console.log("running at port 8000"));
+app.listen(port,"0.0.0.0" ,() => console.log("running at port 8000"));

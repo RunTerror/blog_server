@@ -98,7 +98,7 @@ router.route("/update/:username").patch(async (req, res) => {
 
 router.route("/delete/:username").delete(async function (req, res) {
     await User.deleteOne({ userName: req.params.username });
-    res.json("done");
+    res.json("done");f
 });
 
 module.exports = router;
