@@ -9,7 +9,7 @@ const URI='mongodb+srv://bansalabhishek7411:Abhi%401234@cluster0.yhnqyeu.mongodb
 
 mongoose.connect(URI, {
     useNewUrlParser: true,
-    useUnifiedTopology: true, 
+    // useUnifiedTopology: true, 
 });
 
 const connection = mongoose.connection;
@@ -26,4 +26,4 @@ app.use("/profile", profileRoute);
 
 
 const port = process.env.port || 8000;
-app.listen(port,"0.0.0.0" ,() => console.log("running at port 8000"));
+app.listen(port ,() => console.log("running at port 8000"));

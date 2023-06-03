@@ -7,46 +7,43 @@ const path = require("path");
 
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
-        cb(null, "/uploads");
+      cb(null, "./uploads");
     },
     filename: (req, file, cb) => {
-        cb(null, req.decoded.userName + ".jpg");
+      cb(null, req.decoded.username + ".jpg");
+    },
+  });
+  
+  const fileFilter = (req, file, cb) => {
+    if (file.mimetype == "image/jpeg" || file.mimetype == "image/png") {
+      cb(null, true);
+    } else {
+      cb(null, false);
     }
-});
-const fileFilter = (req, file, cb) => {
-    if (file.mimetype == "image/jpg" || file.mimetype == "image/png") {
-        cb(null, true);
-    }
-    else {
-        cb(null, false);
-    }
-}
-
-const upload = multer({
+  };
+  
+  const upload = multer({
     storage: storage,
     limits: {
-        fileSize: 1024 * 1024 * 3
+      fileSize: 1024 * 1024 * 6,
     },
-    fileFilter: fileFilter
-});
-
+    fileFilter: fileFilter,
+  });
+  
 router.route("/add/image").patch(middleware.checkToken, upload.single("img"), async (req, res) => {
-    console.log(req.body);
 
-    let profiledata = await Profile.findOneAndUpdate(
+    await Profile.findOneAndUpdate(
         { userName: req.decoded.userName },
-    );
-    if (req.file === null) {
-        res.json("send some file");
-    }
-    else {
-        profiledata.img = req.file.buffer;
-        await profiledata.save();
-        res.json({
-            msg: "saved",
-            profiledata: profiledata
-        });
-    }
+        {$set: {img: req.file.path}},
+        {new: true}
+    ).then(updatedDoc => {
+        console.log(updatedDoc);
+        res.json("done");
+      })
+      .catch(error => {
+        console.error(error);
+      });
+    
 });
 
 router.route("/add").post(middleware.checkToken, (req, res) => {
@@ -67,6 +64,8 @@ router.route("/add").post(middleware.checkToken, (req, res) => {
         });
     });
 })
+
+
 
 router.route("/checkProfile").get(middleware.checkToken, async (req, res) => {
     const profile = await Profile.findOne({ userName: req.decoded.userName });
