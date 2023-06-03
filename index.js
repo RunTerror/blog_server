@@ -9,7 +9,7 @@ const URI='mongodb+srv://bansalabhishek7411:Abhi%401234@cluster0.yhnqyeu.mongodb
 
 mongoose.connect(URI, {
     useNewUrlParser: true,
-    // useUnifiedTopology: true, 
+    useUnifiedTopology: true, 
 });
 
 const connection = mongoose.connection;

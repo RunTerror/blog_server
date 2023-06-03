@@ -3,7 +3,8 @@ const Profile = require('../models/profile_model');
 const express = require('express');
 const router = express.Router();
 const multer = require('multer');
-const path = require("path");
+const path = require('path');
+const { findOneAndReplace } = require("../models/profile_model");
 
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
@@ -36,13 +37,7 @@ router.route("/add/image").patch(middleware.checkToken, upload.single("img"), as
         { userName: req.decoded.userName },
         {$set: {img: req.file.path}},
         {new: true}
-    ).then(updatedDoc => {
-        console.log(updatedDoc);
-        res.json("done");
-      })
-      .catch(error => {
-        console.error(error);
-      });
+    );
     
 });
 
@@ -64,6 +59,24 @@ router.route("/add").post(middleware.checkToken, (req, res) => {
         });
     });
 })
+
+router.route("/update").post(middleware.checkToken, async(req, res)=>{
+    await Profile.findOneAndReplace(
+        {userName: req.decoded.userName},
+        {
+            proffesion: req.body.proffesion,
+            titleLine: req.body.titleLine,
+            about: req.body.about
+        },
+        {new: true}
+    ).then(replacedDoc => {
+        console.log(replacedDoc);
+        res.json("done");
+      })
+      .catch(error => {
+        console.error(error);
+      });
+});
 
 
 
