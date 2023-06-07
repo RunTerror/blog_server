@@ -3,19 +3,18 @@ const Profile = require('../models/profile_model');
 const express = require('express');
 const router = express.Router();
 const multer = require('multer');
-const path = require('path');
-const { findOneAndReplace } = require("../models/profile_model");
+// const mongoose=require('mongoose');
 
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
       cb(null, "./uploads");
     },
     filename: (req, file, cb) => {
-      cb(null, req.decoded.username + ".jpg");
+      cb(null, req.decoded.userName + ".jpg");
     },
   });
   
-  const fileFilter = (req, file, cb) => {
+  const fileFilter= (req, file, cb) => {
     if (file.mimetype == "image/jpeg" || file.mimetype == "image/png") {
       cb(null, true);
     } else {
@@ -28,16 +27,21 @@ const storage = multer.diskStorage({
     limits: {
       fileSize: 1024 * 1024 * 6,
     },
-    fileFilter: fileFilter,
+    // fileFilter: fileFilter,
   });
   
-router.route("/add/image").patch(middleware.checkToken, upload.single("img"), async (req, res) => {
-
+router.route("/add/image").patch(middleware.checkToken, upload.single("img"), async(req, res) => {
+    try{
     await Profile.findOneAndUpdate(
         { userName: req.decoded.userName },
-        {$set: {img: req.file.path}},
+        {$set: {img: req.file?.path}},
         {new: true}
     );
+    res.json("done");
+    }
+    catch(err){
+      console.log(err)
+    }
     
 });
 
@@ -81,15 +85,17 @@ router.route("/update").post(middleware.checkToken, async(req, res)=>{
 
 
 router.route("/checkProfile").get(middleware.checkToken, async (req, res) => {
-    const profile = await Profile.findOne({ userName: req.decoded.userName });
-    if (profile == null) {
-        res.json({
-            status: false
-        });
-    } else {
-        res.json({
-            status: true
-        });
+    try {
+      let profile=await Profile.findOne({userName: req.decoded.userName});
+      if(profile==null){
+        res.status(200).json({status: false});
+      }
+      else{
+        res.status(200).json({status: true});
+      }
+    } catch (e) {
+      console.log(e);
+      res.json("server error");
     }
 });
 router.route("/anything").get((req, res) => {
@@ -97,3 +103,6 @@ router.route("/anything").get((req, res) => {
 });
 
 module.exports = router;
+
+
+
